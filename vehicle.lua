@@ -9,6 +9,7 @@ vehicle
     fuel
     equipment
     schedule
+    targeting
 ]]
 
 Vehicle = {}
@@ -112,7 +113,8 @@ function Vehicle.save(player, vehicle)
         logistics = save_logistics(vehicle),
         fuel = save_burner(vehicle.burner),
         equipment = save_equipment(vehicle.grid),
-        schedule = vehicle.train and vehicle.train.schedule
+        schedule = vehicle.train and vehicle.train.schedule,
+        targeting = vehicle.type == "spider-vehicle" and vehicle.vehicle_automatic_targeting_parameters
     }
 
     vehicle.destroy()
@@ -192,6 +194,10 @@ function Vehicle.load(player, nearby_rail)
         force = player.force,
         direction = direction,
     }
+    if not vehicle then
+        player.teleport(position)
+        return { "error.no-space" }
+    end
 
     local temp_pos = player.surface.find_non_colliding_position("character", position, 10, 1)
     if not temp_pos then
@@ -208,6 +214,7 @@ function Vehicle.load(player, nearby_rail)
     if saved.fuel then load_burner(vehicle.burner, saved.fuel) end
     if saved.equipment then load_equipment(vehicle.grid, saved.equipment) end
     if saved.schedule then vehicle.train.schedule = saved.schedule end
+    if vehicle.type == "spider-vehicle" then vehicle.vehicle_automatic_targeting_parameters = saved.targeting end
 
     global[player.index][load] = nil
 end
