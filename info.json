@@ -1,0 +1,11 @@
+{
+  "name": "Transformer",
+  "version": "0.0.1",
+  "factorio_version": "1.1",
+  "title": "Transformer",
+  "author": "CircuitFire",
+  "description": "adds transformer equipment",
+  "dependencies": [
+    "base"
+  ]
+}
