@@ -117,7 +117,7 @@ function Vehicle.save(player, vehicle)
         targeting = vehicle.type == "spider-vehicle" and vehicle.vehicle_automatic_targeting_parameters
     }
 
-    vehicle.destroy()
+    vehicle.destroy{raise_destroy=true}
 end
 
 local function load_inventory(vehicle, type, saved)
@@ -201,7 +201,7 @@ function Vehicle.load(player, nearby_rail)
 
     local temp_pos = player.surface.find_non_colliding_position("character", position, 10, 1)
     if not temp_pos then
-        vehicle.destroy()
+        vehicle.destroy{raise_destroy=true}
         player.teleport(position)
         return { "error.no-space" }
     end
