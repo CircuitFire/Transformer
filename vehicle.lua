@@ -141,7 +141,7 @@ local function load_burner(burner, saved)
         inv.insert{name=name, count=count}
     end
     inv = burner.burnt_result_inventory
-    for _, item in pairs(saved.burnt_result_inventory) do
+    for name, count in pairs(saved.burnt_result_inventory) do
         inv.insert{name=name, count=count}
     end
 end
@@ -184,10 +184,12 @@ function Vehicle.load(player, nearby_rail)
     local saved = global[player.index][load]
     if not saved then return { "error.no-vehicle" } end
 
+    -- make room for vehicle
     local temp_pos = player.surface.find_non_colliding_position("character", position, 100, 10)
     if not temp_pos then return { "error.no-space" } end
     player.teleport(temp_pos)
 
+    --spawn vehicle
     local vehicle = player.surface.create_entity {
         name = saved.name,
         position = position,
@@ -205,7 +207,8 @@ function Vehicle.load(player, nearby_rail)
         player.teleport(position)
         return { "error.no-space" }
     end
-    player.teleport(temp_pos)
+    vehicle.set_driver(player.character)
+    -- player.teleport(temp_pos)
 
     vehicle.health = saved.health
     if saved.inventory then load_inventory(vehicle, inventory_type(vehicle, "trunk"), saved.inventory) end
