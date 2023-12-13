@@ -36,7 +36,7 @@ local function save_inventory(vehicle, type)
     if not type then return end
     local inv = vehicle.get_inventory(type)
 
-    filters = {}
+    local filters = {}
     for i=1, #inv do
         filters[i] = inv.get_filter(i)
     end
@@ -117,7 +117,9 @@ function Vehicle.save(player, vehicle)
         targeting = vehicle.type == "spider-vehicle" and vehicle.vehicle_automatic_targeting_parameters
     }
 
+    local position = vehicle.position
     vehicle.destroy{raise_destroy=true}
+    player.teleport(position)
 end
 
 local function load_inventory(vehicle, type, saved)
